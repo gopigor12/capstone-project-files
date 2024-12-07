@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport", content="width=device-width", initial-scale=1.0">
+    <title>Human Risk in Cybersecurity</title>
+    <style>
+        body {
+            background-color: #e6f7ff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            width: 50%;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container h1 {
+            font-size: 1.2rem;
+            color: #003366;
+            justify-content: center;
+        }
+
+        label {
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, button {
+            font-size: 0.85rem;
+            padding: 6px;
+            margin-bottom: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0066cc;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #004c99;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Human Risk in Cybersecurity</h1>
+        <form id="risk-form">
+            <label for="Sender_Domain_Reputation">Sender Domain Reputation (0 to 10 - 10 is the worst reputation):</label>
+            <input type="number" name="Sender_Domain_Reputation" id="Sender_Domain_Reputation" min="0" max="10" required>
+
+            <label for="URL_Legitimacy_Score">URL Legitimacy Score (0 to 10 - 10 being not legit at all):</label>
+            <input type="number" name="URL_Legitimacy_Score" id="URL_Legitimacy_Score" min="0" max="10" required>
+
+            <label for="Stress_Level">Stress Level (0 to 10 - 10 is a very high stress level):</label>
+            <input type="number" name="Stress_Level" id="Stress_Level" min="0" max="10" required>
+
+            <label for="Curiosity_Index">Curiosity Index (0-10 - 10 is very curious):</label>
+            <input type="number" name="Curiosity_Index" id="Curiosity_Index" min="0" max="10" required>
+
+            <label for="Urgency_Trigger">Urgency Trigger (0 to 10 - 10 being a high urgency trigger):</label>
+            <input type="number" name="Urgency_Trigger" id="Urgency_Trigger" min="0" max="10" required>
+
+            <label for="Prior_Training">Prior Training (0 to 10 - 10 being lots of training):</label>
+            <input type="number" name="Prior_Training" id="Prior_Training" min="0" max="10" required>
+
+            <label for="Email_Subject_Type">Email Subject Type:</label>
+            <select name="Email_Subject_Type" id="Email_Subject_Type">
+                <option value="fear">Fear</option>
+                <option value="reward">Reward</option>
+                <option value="curiosity">Curiosity</option>
+            </select>
+
+            <label for="Attachment_Type">Attachment Type:</label>
+            <select name="Attachment_Type" id="Attachment_Type">
+                <option value=".zip">.zip</option>
+                <option value=".pdf">.pdf</option>
+                <option value="none">None</option>
+            </select>
+
+            <label for="Email_Presentation_Well_Formed">Email Presentation Well Formed (yes/no):</label>
+            <select name="Email_Presentation_Well_Formed" id="Email_Presentation_Well_Formed">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <button type="button" onclick="calculateRisk()">Calculate Risk</button>
+        </form>
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <script>
+        function calculateRisk() {
+            const senderDomainReputation = parseFloat(document.getElementById("Sender_Domain_Reputation").value) || 0;
+            const urlLegitimacyScore = parseFloat(document.getElementById("URL_Legitimacy_Score").value) || 0;
+            const stressLevel = parseFloat(document.getElementById("Stress_Level").value) || 0;
+            const curiosityIndex = parseFloat(document.getElementById("Curiosity_Index").value) || 0;
+            const urgencyTrigger = parseFloat(document.getElementById("Urgency_Trigger").value) || 0;
+            const priorTraining = parseFloat(document.getElementById("Prior_Training").value) || 0;
+
+            const emailSubjectType = document.getElementById("Email_Subject_Type").value;
+            const attachmentType = document.getElementById("Attachment_Type").value;
+            const emailWellFormed = document.getElementById("Email_Presentation_Well_Formed").value;
+
+            let risk = 
+                (10 - senderDomainReputation) * 0.1 +
+                (10 - urlLegitimacyScore) * 0.1 +
+                stressLevel * 0.2 +
+                curiosityIndex * 0.2 +
+                urgencyTrigger * 0.3 -
+                priorTraining * 0.2;
+
+            if (emailSubjectType === "fear") risk += 10;
+            else if (emailSubjectType === "reward") risk += 5;
+
+            if (attachmentType === ".zip") risk += 15;
+            else if (attachmentType === ".pdf") risk += 5;
+
+            if (emailWellFormed === "no") risk += 10;
+
+            risk = Math.max(0, Math.min(100, risk));
+
+            const resultContainer = document.getElementById('result');
+            resultContainer.textContent = `On the basis of the inputs, the user is at ${Math.round(risk)}% risk.`;
+        }
+    </script>
+</body>
+</html>
